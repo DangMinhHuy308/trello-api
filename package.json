@@ -1,0 +1,13 @@
+{
+  "name": "trello-api",
+  
+  "version": "1.0.0",
+  "description": "dangminhhuy mern stack",
+  "main": "src/server.js",
+  "author": "minhhuydev",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
