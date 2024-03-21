@@ -1,15 +1,28 @@
-const express = require('express')
+/* eslint-disable no-console */
 
-const app = express()
+import express from 'express'
+import exitHook from 'async-exit-hook'
+import { CONNECT_DB, CLOSE_DB } from '~/config/mongodb'
+import { env } from '~/config/environment'
+import { APIs_V1 } from '~/routes/v1'
+const START_SERVER = () => {
 
-const hostname = 'localhost'
+  const app = express()
 
-const port = 8017
 
-app.get('/',function(req,res) {
-    res.send('<h1>Hello word</h1>')
-})
+  app.use('/v1', APIs_V1)
 
-app.listen(port,hostname, ()=> {
-    console.log(`Hello HuyDev, I am running at http://${hostname}:${port}`);
-})
+  app.listen(env.APP_PORT, env.APP_HOST, () => {
+    console.log(`Hello ${env.AUTHOR}, I am running at ${env.APP_HOST}:${env.APP_PORT}/`)
+  })
+  exitHook(() => {
+    CLOSE_DB()
+  })
+}
+CONNECT_DB()
+  .then(() => console.log('Connected successfully'))
+  .then(() => START_SERVER())
+  .catch(error => {
+    console.error()
+    process.exit(0)
+  })
