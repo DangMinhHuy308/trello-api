@@ -1,8 +1,4 @@
-/**
- * Updated by trungquandev.com's author on August 17 2023
- * YouTube: https://youtube.com/@trungquandev
- * "A bit of fragrance clings to the hand that gives flowers!"
- */
+
 import Joi from 'joi'
 import ApiError from '~/utils/ApiError'
 import { StatusCodes } from 'http-status-codes'
@@ -17,10 +13,11 @@ const createNew = async (req, res, next) => {
     next()
 
   } catch (error) {
-    const errorMessage = new Error(error).message() 
-    const customError = new ApiError(StatusCodes.UNPROCESSABLE_ENTITY,errorMessage)
+    // const errorMessage = error.message
+    const errorMessage = new Error(error.message)
+    const customError = new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, errorMessage)
     next(customError)
-    
+
   }
 
 }
