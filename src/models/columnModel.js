@@ -19,6 +19,8 @@ const COLUMN_COLLECTION_SCHEMA = Joi.object({
   updatedAt: Joi.date().timestamp('javascript').default(null),
   _destroy: Joi.boolean().default(false)
 })
+const INVALID_UPDATE_FIELDS =['_id', 'boardId', 'createdAt']
+
 const validateBeforeCreate = async(data) => {
   return await COLUMN_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false })
 }
@@ -28,7 +30,7 @@ const createNew = async (data) => {
     const validData = await validateBeforeCreate(data)
     const newColumAdd ={
       ...validData,
-      boardId: new ObjectId(validData.boardId),
+      boardId: new ObjectId(validData.boardId)
     }
     const createdColumn = await GET_DB().collection(COLUMN_COLLECTION_NAME).insertOne(newColumAdd)
     return createdColumn
@@ -46,15 +48,39 @@ const findOneById = async (id) => {
     throw new Error(error)
   }
 }
-const pushCardOrderIds = async(card) =>{
+const pushCardOrderIds = async(card) => {
   try {
     const result = await GET_DB().collection(COLUMN_COLLECTION_NAME).findOneAndUpdate(
       {
-        _id: new ObjectId(card.columnId),
+        _id: new ObjectId(card.columnId)
 
       },
-      {$push:{ cardOrderIds: new ObjectId(card._id)}},
-      {returnDocument:'after'}
+      { $push:{ cardOrderIds: new ObjectId(card._id) } },
+      { returnDocument:'after' }
+    )
+    return result
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+const update = async(columnId, updateData) => {
+  try {
+    // lọc những field mà chúng ta ko muốn cập nhập
+    Object.keys(updateData).forEach(fieldName => {
+      if (INVALID_UPDATE_FIELDS.includes(fieldName)) {
+        delete updateData[fieldName]
+      }
+    })
+    // đối với những dữ liệu lien quan tới ObjectId, biến đổi ở đây
+    if (updateData.cardOrderIds) {
+      updateData.cardOrderIds = updateData.cardOrderIds.map(_id => (new ObjectId(_id)))
+    }
+    const result = await GET_DB().collection(COLUMN_COLLECTION_NAME).findOneAndUpdate(
+      {
+        _id: new ObjectId(columnId)
+      },
+      { $set: updateData },
+      { returnDocument:'after' } //trả về kq mới sau khi cập nhập
     )
     return result
   } catch (error) {
@@ -66,5 +92,6 @@ export const columnModel = {
   COLUMN_COLLECTION_SCHEMA,
   createNew,
   findOneById,
-  pushCardOrderIds
+  pushCardOrderIds,
+  update
 }
