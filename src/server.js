@@ -21,7 +21,7 @@ const START_SERVER = () => {
   // Môi trường Production
   if (env.BUILD_MODE === 'production') {
     app.listen(process.env.PORT, () => {
-      console.log(`Hello ${env.AUTHOR}, I am running at ${env.LOCAL_DEV_APP_HOST}:${process.env.PORT}/`)
+      console.log(`Hello ${env.AUTHOR}, I am running at Port:${process.env.PORT}/`)
     })
   } else {
     // Môi trường local dev
