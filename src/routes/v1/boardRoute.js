@@ -13,6 +13,7 @@ Router.route('/')
     res.status(StatusCodes.OK).json({ message:'GET: API get list board' })
 
   })
+  // .get(boardController.getListBoard)
   .post(boardValidation.createNew,boardController.createNew)
 Router.route('/:id')
   .get(boardController.getDetails)
