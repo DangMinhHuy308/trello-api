@@ -25,6 +25,31 @@ const createNew = async (reqBody) => {
     throw error
   }
 }
+// const getListBoard = async (boardId) => {
+//   try {
+//     const board = await boardModel.getListBoard(boardId);
+//     if (!board) {
+//       throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found');
+//     }
+
+//     // Deep clone board để không ảnh hưởng tới board ban đầu
+//     const resBoard = cloneDeep(board);
+
+//     // Duyệt qua từng cột và lọc các thẻ vào cột tương ứng
+//     resBoard.columns.forEach(column => {
+//       column.cards = resBoard.cards.filter(card => card.columnId.toString() === column._id.toString());
+//     });
+
+//     // Xóa mảng cards khỏi board ban đầu
+//     delete resBoard.cards;
+
+//     // Trả kết quả về từ service
+//     return resBoard;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+
 const getDetails = async (boardId) => {
   try {
 
@@ -86,5 +111,6 @@ export const boardService ={
   createNew,
   getDetails,
   update,
-  moveCardToDifferentColumn
+  moveCardToDifferentColumn,
+  // getListBoard
 }

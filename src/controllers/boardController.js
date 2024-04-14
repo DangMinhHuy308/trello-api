@@ -28,6 +28,19 @@ const getDetails = async (req, res, next) => {
 
   }
 }
+// const getListBoard = async (req, res, next) => {
+//   try {
+//     // console.log(object)
+//     const boardList = req.body
+//     // 
+//     const board = await boardService.getDetails(boardList)
+
+//     res.status(StatusCodes.OK).json(board)
+//   } catch (error) {
+//     next(error)
+
+//   }
+// }
 const update = async (req, res, next) => {
   try {
     const boardId = req.params.id
@@ -54,5 +67,6 @@ export const boardController = {
   createNew,
   getDetails,
   update,
-  moveCardToDifferentColumn
+  moveCardToDifferentColumn,
+  // getListBoard
 }

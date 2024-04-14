@@ -46,6 +46,33 @@ const findOneById = async (id) => {
     throw new Error(error)
   }
 }
+// const getListBoard = async (id) => {
+//   try {
+//     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).aggregate([
+//       { $match:{
+//         _id: new ObjectId(id),
+//         _destroy: false
+//       } },
+//       { $lookup:{
+//         from: columnModel.COLUMN_COLLECTION_NAME,
+//         localField: 'columnOrderIds',
+//         foreignField: '_id',
+//         as: 'columns'
+//       } },
+//       { $lookup:{
+//         from: cardModel.CARD_COLLECTION_NAME,
+//         localField: '_id',
+//         foreignField: 'boardId',
+//         as: 'cards'
+//       } }
+//     ]).toArray();
+//     // Trả về phần tử đầu tiên của kết quả hoặc null nếu không tìm thấy
+//     return result[0] || null;
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
+
 const getDetails = async (id) => {
   try {
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).aggregate([
@@ -99,7 +126,6 @@ const update = async(boardId, updateData) => {
     if (updateData.columnOrderIds) {
       updateData.columnOrderIds = updateData.columnOrderIds.map(_id => (new ObjectId(_id)))
     }
-    console.log('updateData',updateData);
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
       {
         _id: new ObjectId(boardId)
@@ -136,5 +162,6 @@ export const boardModel ={
   getDetails,
   pushColumnOrderIds,
   update,
-  pullColumnOrderIds
+  pullColumnOrderIds,
+  // getListBoard
 }
